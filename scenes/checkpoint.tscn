@@ -1,0 +1,44 @@
+[gd_scene load_steps=7 format=3 uid="uid://duhhhgvcs8esb"]
+
+[ext_resource type="Texture2D" uid="uid://dsugoc4l3uutb" path="res://asset/sprite/exit_jump (28x28).png" id="1_yyywg"]
+[ext_resource type="Script" uid="uid://8rq1miriyn3r" path="res://scripts/platform.gd" id="2_ywqth"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yyywg"]
+size = Vector2(18, 7)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ywqth"]
+atlas = ExtResource("1_yyywg")
+region = Rect2(28, 0, 28, 28)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_vsimk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ywqth")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ywqth"]
+size = Vector2(24, 7)
+
+[node name="Checkpoint" type="StaticBody2D"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, -9.5)
+shape = SubResource("RectangleShape2D_yyywg")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_vsimk")
+
+[node name="Platform" type="Area2D" parent="."]
+collision_mask = 2
+script = ExtResource("2_ywqth")
+
+[node name="PlatformTop" type="CollisionShape2D" parent="Platform"]
+position = Vector2(-1, -11.5)
+shape = SubResource("RectangleShape2D_ywqth")
+
+[connection signal="body_entered" from="Platform" to="Platform" method="_on_body_entered"]

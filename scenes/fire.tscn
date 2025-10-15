@@ -1,0 +1,80 @@
+[gd_scene load_steps=12 format=3 uid="uid://co5ma8rlp7n4n"]
+
+[ext_resource type="Texture2D" uid="uid://bgd5cwab5it5e" path="res://asset/sprite/Off.png" id="1_52nqi"]
+[ext_resource type="Script" uid="uid://b3kj8v44177p5" path="res://scripts/fire.gd" id="1_g5mbl"]
+[ext_resource type="Texture2D" uid="uid://b65ugqovq7s2o" path="res://asset/sprite/On (16x32).png" id="2_xqmqg"]
+[ext_resource type="PackedScene" uid="uid://bdbhu4ndx51cw" path="res://scenes/killzone.tscn" id="4_rach5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g5mbl"]
+size = Vector2(22, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xqmqg"]
+size = Vector2(16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_52nqi"]
+atlas = ExtResource("1_52nqi")
+region = Rect2(0, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xqmqg"]
+atlas = ExtResource("2_xqmqg")
+region = Rect2(32, 0, 16, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g5mbl"]
+atlas = ExtResource("2_xqmqg")
+region = Rect2(16, 0, 16, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_xqmqg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_52nqi")
+}],
+"loop": true,
+"name": &"off",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xqmqg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g5mbl")
+}],
+"loop": true,
+"name": &"on",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_txieb"]
+size = Vector2(20, 12)
+
+[node name="Fire" type="Area2D"]
+collision_mask = 2
+script = ExtResource("1_g5mbl")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 7)
+shape = SubResource("RectangleShape2D_g5mbl")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="StaticBody2D"]
+position = Vector2(0, 8)
+shape = SubResource("RectangleShape2D_xqmqg")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_xqmqg")
+animation = &"on"
+autoplay = "off"
+frame_progress = 0.15772313
+
+[node name="Killzone" parent="." instance=ExtResource("4_rach5")]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
+position = Vector2(0, -7)
+shape = SubResource("RectangleShape2D_txieb")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
+[connection signal="ready" from="." to="." method="_on_ready"]
+[connection signal="ready" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_ready"]
